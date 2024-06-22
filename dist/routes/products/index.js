@@ -9,4 +9,5 @@ exports.productsRouter = router;
 router.get(types_1.EntryPoints.GET_All, products_1.ProductsController.getAll);
 router.get(types_1.EntryPoints.GET_By_Id, products_1.ProductsController.getById);
 router.get(types_1.EntryPoints.GET_By_Category, products_1.ProductsController.getByCategory);
+router.get(types_1.EntryPoints.GET_All_Categories, products_1.ProductsController.getAllCategories);
 router.post(types_1.EntryPoints.CREATE, products_1.ProductsController.create);

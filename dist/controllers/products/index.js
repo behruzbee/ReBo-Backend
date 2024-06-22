@@ -92,5 +92,17 @@ class ProductsController {
             }
         });
     }
+    static getAllCategories(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const categories = yield product_1.ProductModel.distinct('category');
+                res.status(200).json(categories);
+            }
+            catch (error) {
+                console.error(error);
+                res.status(500).send('Internal Server Error');
+            }
+        });
+    }
 }
 exports.ProductsController = ProductsController;

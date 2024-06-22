@@ -7,4 +7,5 @@ var EntryPoints;
     EntryPoints["GET_By_Id"] = "/products/:id";
     EntryPoints["CREATE"] = "/products";
     EntryPoints["GET_By_Category"] = "/products/category/:category";
+    EntryPoints["GET_All_Categories"] = "/products/categories/all";
 })(EntryPoints || (exports.EntryPoints = EntryPoints = {}));
