@@ -1,6 +1,7 @@
 import express, { Express, Request, Response } from 'express'
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
+import cors from 'cors';
 import { productsRouter } from './routes/products'
 
 dotenv.config()
@@ -10,6 +11,7 @@ const port = process.env.PORT || 3000
 const dbUrl = process.env.DB_URL as string
 
 app.use(express.json())
+app.use(cors())
 
 app.use(productsRouter)
 
