@@ -26,13 +26,16 @@ class ProductsController {
     }
     static create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             try {
-                const product = new product_1.ProductModel(req.body);
+                const { name, price, category } = req.body;
+                const imageUrl = ((_a = req.file) === null || _a === void 0 ? void 0 : _a.path) || '';
+                const product = new product_1.ProductModel({ name, price, category, url: imageUrl });
                 yield product.save();
                 res.status(201).json(product);
             }
             catch (error) {
-                console.log(error);
+                console.error(error);
                 res.status(500).send('Internal Server Error');
             }
         });
