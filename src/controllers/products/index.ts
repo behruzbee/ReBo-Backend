@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { IProduct } from '../../models/product/types'
+import type { IProduct } from '../../models/product/types'
 import { ProductModel } from '../../models/product'
 
 export class ProductsController {
@@ -8,17 +8,24 @@ export class ProductsController {
       const products = await ProductModel.find()
       res.status(200).json(products)
     } catch (error) {
-      console.log(error)
+      console.error(error)
       res.status(500).send('Internal Server Error')
     }
   }
 
-  static async create(req: Request, res: Response): Promise<void> {
+  static async create(
+    req: Request<any, any, IProduct>,
+    res: Response
+  ): Promise<void> {
     try {
-      const { name, price, category } = req.body
-      const imageUrl = req.file?.path || ''
+      const productData = req.body
+      const imageUrl = req.file ? `/uploads/${req.file.filename}` : ''
 
-      const product = new ProductModel({ name, price, category, url: imageUrl })
+      const product = new ProductModel({
+        ...productData,
+        imageUrl
+      })
+
       await product.save()
       res.status(201).json(product)
     } catch (error) {
@@ -39,60 +46,33 @@ export class ProductsController {
 
       res.status(200).json(product)
     } catch (error) {
-      console.error(error)
+      console.log(error)
       res.status(500).send('Internal Server Error')
     }
   }
 
-  static async getByCategory(req: Request, res: Response): Promise<void> {
+  static async editById(req: Request, res: Response): Promise<void> {
     try {
-      const category = req.params.category
-      const products = await ProductModel.find({ category })
+      const id = req.params.id
+      const updatedData = req.body
 
-      if (products.length === 0) {
-        res.status(404).send('No products found in this category')
-        return
-      }
+      const product = await ProductModel.findByIdAndUpdate({_id: id}, updatedData)
 
-      res.status(200).json(products)
+      res.status(200).json(product)
     } catch (error) {
-      console.error(error)
+      console.log(error)
       res.status(500).send('Internal Server Error')
     }
   }
 
-  static async searchByName(req: Request, res: Response): Promise<void> {
+  static async delete(req: Request, res: Response): Promise<void> {
     try {
-      const name = req.query.name as string
+      const id = req.params.id
+      const product = await ProductModel.findOneAndDelete({ _id: id })
 
-      if (!name) {
-        res.status(400).send('Name parameter is required')
-        return
-      }
-
-      const products = await ProductModel.find(
-        { name: { $regex: name, $options: 'i' } },
-        'name price image'
-      )
-
-      if (products.length === 0) {
-        res.status(404).send('No products found with this name')
-        return
-      }
-
-      res.status(200).json(products)
+      res.status(200).json(product)
     } catch (error) {
-      console.error(error)
-      res.status(500).send('Internal Server Error')
-    }
-  }
-
-  static async getAllCategories(req: Request, res: Response): Promise<void> {
-    try {
-      const categories = await ProductModel.distinct('category')
-      res.status(200).json(categories)
-    } catch (error) {
-      console.error(error)
+      console.log(error)
       res.status(500).send('Internal Server Error')
     }
   }

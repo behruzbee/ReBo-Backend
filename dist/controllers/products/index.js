@@ -19,18 +19,17 @@ class ProductsController {
                 res.status(200).json(products);
             }
             catch (error) {
-                console.log(error);
+                console.error(error);
                 res.status(500).send('Internal Server Error');
             }
         });
     }
     static create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            var _a;
             try {
-                const { name, price, category } = req.body;
-                const imageUrl = ((_a = req.file) === null || _a === void 0 ? void 0 : _a.path) || '';
-                const product = new product_1.ProductModel({ name, price, category, url: imageUrl });
+                const productData = req.body;
+                const imageUrl = req.file ? `/uploads/${req.file.filename}` : '';
+                const product = new product_1.ProductModel(Object.assign(Object.assign({}, productData), { imageUrl }));
                 yield product.save();
                 res.status(201).json(product);
             }
@@ -52,57 +51,34 @@ class ProductsController {
                 res.status(200).json(product);
             }
             catch (error) {
-                console.error(error);
+                console.log(error);
                 res.status(500).send('Internal Server Error');
             }
         });
     }
-    static getByCategory(req, res) {
+    static editById(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const category = req.params.category;
-                const products = yield product_1.ProductModel.find({ category });
-                if (products.length === 0) {
-                    res.status(404).send('No products found in this category');
-                    return;
-                }
-                res.status(200).json(products);
+                const id = req.params.id;
+                const updatedData = req.body;
+                const product = yield product_1.ProductModel.findByIdAndUpdate({ _id: id }, updatedData);
+                res.status(200).json(product);
             }
             catch (error) {
-                console.error(error);
+                console.log(error);
                 res.status(500).send('Internal Server Error');
             }
         });
     }
-    static searchByName(req, res) {
+    static delete(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const name = req.query.name;
-                if (!name) {
-                    res.status(400).send('Name parameter is required');
-                    return;
-                }
-                const products = yield product_1.ProductModel.find({ name: { $regex: name, $options: 'i' } }, 'name price image');
-                if (products.length === 0) {
-                    res.status(404).send('No products found with this name');
-                    return;
-                }
-                res.status(200).json(products);
+                const id = req.params.id;
+                const product = yield product_1.ProductModel.findOneAndDelete({ _id: id });
+                res.status(200).json(product);
             }
             catch (error) {
-                console.error(error);
-                res.status(500).send('Internal Server Error');
-            }
-        });
-    }
-    static getAllCategories(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const categories = yield product_1.ProductModel.distinct('category');
-                res.status(200).json(categories);
-            }
-            catch (error) {
-                console.error(error);
+                console.log(error);
                 res.status(500).send('Internal Server Error');
             }
         });

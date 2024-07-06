@@ -1,27 +1,15 @@
 import { Router } from 'express'
-import multer from 'multer'
 
 import { EntryPoints } from './types'
 import { ProductsController } from '../../controllers/products'
-
-// Настройка хранилища для multer
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/') 
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + '-' + file.originalname)
-  }
-})
-
-const upload = multer({ storage: storage })
+import { singleUpload } from '../../middlewares/multer'
 
 const router = Router()
 
-router.get(EntryPoints.GET_All, ProductsController.getAll)
-router.get(EntryPoints.GET_By_Id, ProductsController.getById)
-router.get(EntryPoints.GET_By_Category, ProductsController.getByCategory)
-router.get(EntryPoints.GET_All_Categories, ProductsController.getAllCategories)
-router.post(EntryPoints.CREATE, upload.single('image'), ProductsController.create);
+router.post(EntryPoints.CREATE, singleUpload, ProductsController.create)
+router.get(EntryPoints.GET_ALL, ProductsController.getAll)
+router.get(EntryPoints.GET_BY_ID, ProductsController.getById)
+router.patch(EntryPoints.EDIT_BY_ID, ProductsController.editById)
+router.delete(EntryPoints.DELETE, ProductsController.delete)
 
 export { router as productsRouter }

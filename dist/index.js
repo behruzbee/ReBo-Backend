@@ -15,13 +15,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const cors_1 = __importDefault(require("cors"));
+const path_1 = __importDefault(require("path"));
 const products_1 = require("./routes/products");
+const slider_1 = require("./routes/slider");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = process.env.PORT || 3000;
 const dbUrl = process.env.DB_URL;
 app.use(express_1.default.json());
+app.use((0, cors_1.default)());
+app.use('/uploads', express_1.default.static(path_1.default.join(__dirname, '..', 'uploads')));
 app.use(products_1.productsRouter);
+app.use(slider_1.sliderRouter);
 const start = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield mongoose_1.default.connect(dbUrl).then(() => {
