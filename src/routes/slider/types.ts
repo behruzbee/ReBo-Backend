@@ -1,4 +1,5 @@
 export enum EntryPoints {
-    CREATE = '/slider',
-    DELETE = '/slider/:id'
-  }  
+  GET_ALL = '/sliders',
+  CREATE = '/slider',
+  DELETE = '/slider/:id'
+}

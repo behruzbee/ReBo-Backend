@@ -12,6 +12,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.SliderController = void 0;
 const slider_1 = require("../../models/slider");
 class SliderController {
+    static getAll(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const sliders = yield slider_1.SliderModel.find();
+                res.status(200).json(sliders);
+            }
+            catch (error) {
+                console.log(error);
+                res.status(500).send('Internal Server Error');
+            }
+        });
+    }
     static create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {

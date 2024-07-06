@@ -6,6 +6,7 @@ import { singleUpload } from '../../middlewares/multer'
 
 const router = Router()
 
+router.get(EntryPoints.GET_ALL, SliderController.getAll)
 router.post(EntryPoints.CREATE, singleUpload, SliderController.create)
 router.delete(EntryPoints.DELETE, SliderController.delete)
 

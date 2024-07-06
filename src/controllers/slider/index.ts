@@ -3,6 +3,17 @@ import type { ISlider } from '../../models/slider/types'
 import { SliderModel } from '../../models/slider'
 
 export class SliderController {
+  static async getAll(req: Request, res: Response): Promise<void> {
+    try {
+      const sliders = await SliderModel.find()
+
+      res.status(200).json(sliders)
+    } catch (error) {
+      console.log(error)
+      res.status(500).send('Internal Server Error')
+    }
+  }
+
   static async create(
     req: Request<any, any, ISlider>,
     res: Response

@@ -1,0 +1,177 @@
+openapi: 3.0.0
+info:
+  title: API Documentation
+  description: |
+    This API manages products and sliders.
+  version: 1.0.0
+
+paths:
+  /api/products:
+    get:
+      summary: Get all products
+      responses:
+        '200':
+          description: A list of products
+        '500':
+          description: Internal Server Error
+
+  /api/product:
+    post:
+      summary: Create a new product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the product
+                description:
+                  type: string
+                  description: The description of the product
+                price:
+                  type: number
+                  description: The price of the product
+              required:
+                - name
+                - price
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad request
+        '500':
+          description: Internal Server Error
+
+  /api/product/{id}:
+    get:
+      summary: Get a product by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Product ID
+      responses:
+        '200':
+          description: A product object
+        '404':
+          description: Product not found
+        '500':
+          description: Internal Server Error
+
+    patch:
+      summary: Update a product by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Product ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The updated name of the product
+                description:
+                  type: string
+                  description: The updated description of the product
+                price:
+                  type: number
+                  description: The updated price of the product
+              required:
+                - name
+                - price
+      responses:
+        '200':
+          description: Updated
+        '400':
+          description: Bad request
+        '404':
+          description: Product not found
+        '500':
+          description: Internal Server Error
+
+    delete:
+      summary: Delete a product by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Product ID
+      responses:
+        '200':
+          description: Deleted
+        '404':
+          description: Product not found
+        '500':
+          description: Internal Server Error
+
+  /api/sliders:
+    get:
+      summary: Get all sliders
+      responses:
+        '200':
+          description: A list of sliders
+        '500':
+          description: Internal Server Error
+
+  /api/slider:
+    post:
+      summary: Create a new slider
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: The title of the slider
+                description:
+                  type: string
+                  description: The description of the slider
+                imageUrl:
+                  type: string
+                  format: uri
+                  description: The URL of the image for the slider
+              required:
+                - title
+                - imageUrl
+      responses:
+        '200':
+          description: Created
+        '400':
+          description: Bad request
+        '500':
+          description: Internal Server Error
+
+  /api/slider/{id}:
+    delete:
+      summary: Delete a slider by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Slider ID
+      responses:
+        '201':
+          description: Deleted
+        '404':
+          description: Slider not found
+        '500':
+          description: Internal Server Error
